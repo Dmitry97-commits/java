@@ -1,12 +1,17 @@
 package test;
 
+import org.junit.jupiter.api.Assertions;
 import pages.MainPage;
+import pages.SubmittingPage;
 import utils.RandomUtils;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 
 public class FirstExperienceJavaTest  extends  BaseTest{
     MainPage mainPage = new MainPage();
+    SubmittingPage submittingPage = new SubmittingPage();
 
     @Test
     public void user()
@@ -23,5 +28,11 @@ public class FirstExperienceJavaTest  extends  BaseTest{
         mainPage.uploadFile();
         mainPage.enterStateAndCity();
         mainPage.clickSubmit();
+
+        Assertions.assertAll("Information doesnt match",
+                ()->assertEquals(SubmittingPage.getStudentInfo(0), String.format("%s %s",firstname,lastname)),
+                ()->assertEquals(SubmittingPage.getStudentInfo(1),email)
+
+        );
     }
 }
