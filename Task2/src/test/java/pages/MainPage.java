@@ -1,107 +1,82 @@
 package pages;
 
-import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideElement;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import utils.RandomUtils;
 
 import static com.codeborne.selenide.Selenide.*;
 
 public class MainPage {
 
-    private final SelenideElement closeBannerButton = $(By.id("close-fixedban"));
-    private final SelenideElement nameField = $(By.id("firstName"));
-    private final SelenideElement lastNameField = $(By.id("lastName"));
-    private final SelenideElement emailField = $(By.id("userEmail"));
-    private final ElementsCollection genders = $$(By.xpath("//label[contains(@for,'gender')]"));
-    private final SelenideElement phoneField = $(By.id("userNumber"));
-    private final ElementsCollection hobbies = $$(By.xpath("//label[contains(@for,'hobbies-checkbox')]"));
-    private final SelenideElement birthDayLabel = $(By.id("dateOfBirthInput"));
-    private final SelenideElement attachmentLabel = $(By.id("uploadPicture"));
-    private final SelenideElement stateField = $(By.id("state"));
-    private final SelenideElement cityField = $(By.id("city"));
-    private final ElementsCollection resultOfStateAndCity = $$(By.xpath("//div[contains(@class,'singleValue')]"));
-    private final SelenideElement submitButton = $(By.id("submit"));
-
     private void enterYearBD(String year){
-        var selectedYear
-                = $x(String.format("//div[@class='react-datepicker']//select[contains(@class,'year-select')]//option[contains(text(),%s)]",year));
-        selectedYear.click();
+        $x(String.format("//div[@class='react-datepicker']//select[contains(@class,'year-select')]//option[contains(text(),%s)]",year)).click();
     }
 
     private void enterMonthBD(String month){
-        var selectedMonth
-                = $x(String.format("//div[@class='react-datepicker']//select[contains(@class,'month-select')]//option[contains(text(),'%s')]",month));
-        selectedMonth.click();
+        $x(String.format("//div[@class='react-datepicker']//select[contains(@class,'month-select')]//option[contains(text(),'%s')]",month)).click();
     }
 
     private void enterDayBD(String day){
-        var selectedDay
-                = $x(String.format("//div[contains(@class,'datepicker__day')and contains(text(),%s)]",day));
-        selectedDay.click();
+        $x(String.format("//div[contains(@class,'datepicker__day')and contains(text(),%s)]",day)).click();
     }
 
-    public void closeBanner(){
-        closeBannerButton.click();
+    public MainPage closeBanner(){
+        $(By.id("close-fixedban")).click();
+        return this;
     }
 
-    public String sendName(String name){
-        nameField.sendKeys(name);
-        return name;
+    public MainPage sendName(String name){
+        $(By.id("firstName")).sendKeys(name);
+        return this;
     }
 
-    public String sendLastName(String lastname){
-        lastNameField.sendKeys(lastname);
-        return lastname;
+    public MainPage sendLastName(String lastname){
+        $(By.id("lastName")).sendKeys(lastname);
+        return this;
     }
 
-    public String sendEmail(String email){
-        emailField.sendKeys(email);
-        return email;
+    public MainPage sendEmail(String email){
+        $(By.id("userEmail")).sendKeys(email);
+        return this;
     }
 
-    public String chooseGender(){
-        var gender = genders.get(RandomUtils.RandomInt(genders.size()-1));
-        gender.click();
-        return gender.getText();
+    public MainPage enterGender(String gender){
+        $(By.xpath(String.format("//label[contains(text(), '%s')]",gender))).click();
+        return this;
     }
 
-    public String enterPhoneNumber(){
-        var number = RandomStringUtils.randomNumeric(10);
-        phoneField.sendKeys(number);
-        return number;
+    public MainPage enterPhoneNumber(String number){
+        $(By.id("userNumber")).sendKeys(number);
+        return this;
     }
 
-    public String enterHobbies(){
-        var hobbie = hobbies.get(RandomUtils.RandomInt(hobbies.size()-1));
-        hobbie.click();
-        return hobbie.getText();
+    public MainPage enterHobbie(String hobbie){
+        $(By.xpath(String.format("//label[contains(text(), '%s')]", hobbie))).click();
+        return this;
     }
 
-    public String enterBD(String day, String month, String year){
-        birthDayLabel.click();
+    public MainPage enterBD(String day, String month, String year){
+        $(By.id("dateOfBirthInput")).click();
         enterYearBD(year);
         enterMonthBD(month);
         enterDayBD(day);
-        return String.format("%s %s,%s",day,month,year);
+        return this;
     }
 
-    public void uploadFile(){
-        attachmentLabel.uploadFromClasspath("screenshot.png");
+    public MainPage uploadFile(){
+        $(By.id("uploadPicture")).uploadFromClasspath("screenshot.png");
+        return this;
     }
 
-    public String enterStateAndCity(){
-        stateField.scrollIntoView(true);
-        actions().moveToElement(stateField).click(stateField).sendKeys(Keys.ENTER).moveToElement(cityField)
-                .click(cityField).sendKeys(Keys.ENTER).perform();
-        var state = resultOfStateAndCity.first().getText();
-        var city = resultOfStateAndCity.last().getText();
-        return String.format("%s %s",state,city);
+    public MainPage enterStateAndCity(){
+        var state = $(By.id("state")).scrollIntoView(true);
+        var city = $(By.id("city"));
+        actions().moveToElement(state).click(state).sendKeys(Keys.ENTER).moveToElement(city)
+                .click(city).sendKeys(Keys.ENTER).perform();
+        return this;
     }
 
-    public void clickSubmit(){
-        submitButton.click();
+    public MainPage clickSubmit(){
+        $(By.id("submit")).click();
+        return this;
     }
 }

@@ -11,7 +11,7 @@ public class SubmittingPage {
 
     private static final ElementsCollection valuesForm = $$(By.xpath("//tbody//tr//td[2]"));
 
-    public Map<String,String> getStudentInfo(){
+    public static Map<String,String> getStudentInfo(){
         Map<String,String> values = new HashMap<>();
         values.put("nameStudent",valuesForm.get(0).getText());
         values.put("emailStudent",valuesForm.get(1).getText());
